@@ -11,13 +11,19 @@ import com.peteralexbizjak.routes.auth
 import com.peteralexbizjak.routes.database
 import com.peteralexbizjak.routes.tooling
 import com.peteralexbizjak.services.AuthService
+import di.mongoModule
 import io.ktor.jackson.*
+import org.koin.core.context.startKoin
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
+    startKoin {
+        modules(mongoModule)
+    }
+
     install(StatusPages) {
         exception<Throwable> {
             call.respond(
