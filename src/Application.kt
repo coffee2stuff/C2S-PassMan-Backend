@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.*
 import com.peteralexbizjak.routes.auth
 import com.peteralexbizjak.routes.database
 import com.peteralexbizjak.routes.tooling
+import com.peteralexbizjak.services.AuthService
 import io.ktor.jackson.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -38,9 +39,10 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
-        auth()
+        auth(authService)
         database()
         tooling()
     }
 }
 
+private val authService = AuthService()
