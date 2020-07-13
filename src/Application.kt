@@ -7,6 +7,9 @@ import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.features.*
 import com.fasterxml.jackson.databind.*
+import com.peteralexbizjak.routes.auth
+import com.peteralexbizjak.routes.database
+import com.peteralexbizjak.routes.tooling
 import io.ktor.jackson.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -14,33 +17,30 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
+    install(StatusPages) {
+        exception<Throwable> {
+            call.respond(
+                HttpStatusCode.InternalServerError,
+                mapOf(
+                    "code" to "500: Internal Server Error",
+                    "message" to "This was not supposed to happen! This error was on us."
+                )
+            )
+        }
+    }
+
     install(ContentNegotiation) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
+            disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
         }
     }
 
     routing {
-        get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
-        }
-
-        install(StatusPages) {
-            exception<AuthenticationException> { cause ->
-                call.respond(HttpStatusCode.Unauthorized)
-            }
-            exception<AuthorizationException> { cause ->
-                call.respond(HttpStatusCode.Forbidden)
-            }
-
-        }
-
-        get("/json/jackson") {
-            call.respond(mapOf("hello" to "world"))
-        }
+        auth()
+        database()
+        tooling()
     }
 }
-
-class AuthenticationException : RuntimeException()
-class AuthorizationException : RuntimeException()
 
