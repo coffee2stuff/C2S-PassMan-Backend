@@ -2,26 +2,16 @@ package com.peteralexbizjak.services
 
 import com.peteralexbizjak.models.auth.LoginAuthModel
 import com.peteralexbizjak.models.auth.SignUpAuthModel
-import com.peteralexbizjak.models.auth.TokenAuthModel
-import java.util.*
 import java.util.regex.Pattern
 
 class AuthService {
 
-    fun loginService(login: LoginAuthModel): TokenAuthModel {
-        return if (validateCredentials(login.email, login.password)) {
-            TokenAuthModel(true, UUID.randomUUID().toString().replace("-", ""))
-        } else {
-            TokenAuthModel(false, "")
-        }
+    fun loginService(login: LoginAuthModel): Boolean {
+        return validateCredentials(login.email, login.password)
     }
 
-    fun signUpService(signUp: SignUpAuthModel): TokenAuthModel {
-        return if (signUp.displayName.isNotEmpty() && validateCredentials(signUp.email, signUp.password)) {
-            TokenAuthModel(true, UUID.randomUUID().toString().replace("-", ""))
-        } else {
-            TokenAuthModel(false, "")
-        }
+    fun signUpService(signUp: SignUpAuthModel): Boolean {
+        return signUp.displayName.isNotEmpty() && validateCredentials(signUp.email, signUp.password)
     }
 
     private fun validateCredentials(email: String, password: String): Boolean {
@@ -37,6 +27,4 @@ class AuthService {
         .compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,}")
         .matcher(password)
         .matches()
-
-
 }

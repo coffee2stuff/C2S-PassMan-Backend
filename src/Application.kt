@@ -11,18 +11,21 @@ import com.peteralexbizjak.routes.auth
 import com.peteralexbizjak.routes.database
 import com.peteralexbizjak.routes.tooling
 import com.peteralexbizjak.services.AuthService
+import com.peteralexbizjak.services.MongoService
 import di.mongoModule
 import io.ktor.jackson.*
 import org.koin.core.context.startKoin
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main(args: Array<String>): Unit {
+    startKoin {
+        modules(mongoModule)
+    }
+    io.ktor.server.netty.EngineMain.main(args)
+}
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
-    startKoin {
-        modules(mongoModule)
-    }
 
     install(StatusPages) {
         exception<Throwable> {
@@ -45,10 +48,11 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
-        auth(authService)
+        auth(authService, mongoService)
         database()
         tooling()
     }
 }
 
 private val authService = AuthService()
+private val mongoService = MongoService()
