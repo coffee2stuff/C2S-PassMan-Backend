@@ -1,9 +1,9 @@
-package repos
+package db.repositories
 
-import models.LoginModel
-import models.NoteModel
-import models.UserModel
-import providers.MongoDbProvider
+import db.providers.MongoProvider
+import models.database.LoginModel
+import models.database.NoteModel
+import models.database.UserModel
 
 /**
  * Repository for the C2S PassMan DbLib library. This class holds implementations of methods declared in the IMongoRepo
@@ -24,7 +24,7 @@ import providers.MongoDbProvider
  * @constructor creates a repository implementation (!) instance with the MongoDbProvider instance injected as
  * a parameter
  */
-class MongoRepo(private val provider: MongoDbProvider) : IMongoRepo {
+class MongoRepo(private val provider: MongoProvider) : IMongoRepo {
     override fun createLogin(login: LoginModel): Boolean = provider.createDocument<LoginModel>(login)
     override fun readLogin(id: String, token: String): LoginModel = provider.readSingleDocumentByIdAndToken<LoginModel>(id, token)
     override fun readLogins(token: String): List<LoginModel> = provider.readMultipleDocuments<LoginModel>(token) ?: emptyList()

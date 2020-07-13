@@ -1,8 +1,8 @@
-package repos
+package db.repositories
 
-import models.LoginModel
-import models.NoteModel
-import models.UserModel
+import models.database.LoginModel
+import models.database.NoteModel
+import models.database.UserModel
 
 /**
  * In the typical application using Koin as a dependency injection framework, {@code single} and\
