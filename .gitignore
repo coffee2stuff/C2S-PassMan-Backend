@@ -1,0 +1,17 @@
+# IDEs
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+
+# Gradle
+.gradle
+**/build/
+!src/**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# Configs
+config.json
