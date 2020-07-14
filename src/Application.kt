@@ -2,7 +2,6 @@ package com.peteralexbizjak
 
 import io.ktor.application.*
 import io.ktor.response.*
-import io.ktor.request.*
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.features.*
@@ -49,7 +48,7 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         auth(authService, mongoService)
-        database()
+        database(mongoService)
         tooling()
     }
 }
