@@ -12,7 +12,7 @@ apply plugin: 'kotlin'
 apply plugin: 'application'
 
 group 'com.peteralexbizjak'
-version '0.0.2'
+version '0.0.3'
 mainClassName = "com.peteralexbizjak.ApplicationKt"
 
 sourceCompatibility = 1.8
