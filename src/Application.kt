@@ -8,7 +8,6 @@ import io.ktor.features.*
 import com.fasterxml.jackson.databind.*
 import com.peteralexbizjak.routes.auth
 import com.peteralexbizjak.routes.database
-import com.peteralexbizjak.routes.tooling
 import com.peteralexbizjak.services.AuthService
 import com.peteralexbizjak.services.MongoService
 import di.mongoModule
@@ -49,7 +48,6 @@ fun Application.module(testing: Boolean = false) {
     routing {
         auth(authService, mongoService)
         database(mongoService)
-        tooling()
     }
 }
 
