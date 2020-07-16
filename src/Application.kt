@@ -12,6 +12,8 @@ import com.peteralexbizjak.services.AuthService
 import com.peteralexbizjak.services.MongoService
 import di.mongoModule
 import io.ktor.jackson.*
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import org.koin.core.context.startKoin
 
 fun main(args: Array<String>): Unit {

@@ -1,0 +1,1 @@
+web: build/install/c2s-passman-backendgr/bin/c2s-passman-backend
