@@ -1,19 +1,22 @@
 package com.peteralexbizjak
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.http.*
-import io.ktor.features.*
-import com.fasterxml.jackson.databind.*
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.peteralexbizjak.routes.auth
 import com.peteralexbizjak.routes.database
 import com.peteralexbizjak.services.AuthService
 import com.peteralexbizjak.services.MongoService
 import di.mongoModule
-import io.ktor.jackson.*
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.features.CORS
+import io.ktor.features.ContentNegotiation
+import io.ktor.features.StatusPages
+import io.ktor.http.HttpStatusCode
+import io.ktor.jackson.jackson
+import io.ktor.response.respond
+import io.ktor.routing.routing
 import org.koin.core.context.startKoin
 
 fun main(args: Array<String>): Unit {
@@ -29,7 +32,7 @@ fun Application.module(testing: Boolean = false) {
 
     install(CORS) {
         anyHost()
-        host('http://localhost:3000')
+        host("http://localhost:3000")
     }
 
     install(StatusPages) {
