@@ -31,9 +31,11 @@ fun main(args: Array<String>): Unit {
 fun Application.module(testing: Boolean = false) {
 
     install(CORS) {
-        //anyHost()
-        //host("localhost:3000")
-        host("sharp-sinoussi-d74edc.netlify.app")
+        method(HttpMethod.Options)
+        method(HttpMethod.Put)
+        method(HttpMethod.Delete)
+        method(HttpMethod.Patch)
+        anyHost()
     }
 
     install(StatusPages) {
