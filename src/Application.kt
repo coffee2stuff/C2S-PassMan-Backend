@@ -32,8 +32,8 @@ fun Application.module(testing: Boolean = false) {
 
     install(CORS) {
         //anyHost()
-        host("localhost:3000")
-        host("sharp-sinoussi-d74edc.netlify.app")
+        //host("localhost:3000")
+        //host("sharp-sinoussi-d74edc.netlify.app")
     }
 
     install(StatusPages) {
