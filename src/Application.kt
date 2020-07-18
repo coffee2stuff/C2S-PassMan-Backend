@@ -31,7 +31,7 @@ fun main(args: Array<String>): Unit {
 fun Application.module(testing: Boolean = false) {
 
     install(CORS) {
-        anyHost()
+        //anyHost()
         host("localhost:3000", schemes = listOf("http", "https"))
     }
 
