@@ -32,7 +32,7 @@ fun Application.module(testing: Boolean = false) {
 
     install(CORS) {
         anyHost()
-        host("http://localhost:3000")
+        host("localhost:3000", schemes = listOf("http", "https"))
     }
 
     install(StatusPages) {
