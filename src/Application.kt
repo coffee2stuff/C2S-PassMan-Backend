@@ -29,6 +29,7 @@ fun Application.module(testing: Boolean = false) {
 
     install(CORS) {
         anyHost()
+        host('http://localhost:3000')
     }
 
     install(StatusPages) {
