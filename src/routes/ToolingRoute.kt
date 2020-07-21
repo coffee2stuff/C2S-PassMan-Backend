@@ -11,7 +11,7 @@ import utils.helpers.generateNumericUUID
 
 fun Route.tooling() {
     route("uuid") {
-        get("unique_numeric_uuir") {
+        get("unique_numeric_uuid") {
             call.respond(HttpStatusCode.OK, NumericUuidModel(generateNumericUUID()))
         }
     }
