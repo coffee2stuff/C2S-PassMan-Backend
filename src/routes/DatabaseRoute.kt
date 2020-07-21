@@ -1,8 +1,10 @@
 package com.peteralexbizjak.routes
 
 import com.peteralexbizjak.models.auth.ErrorAuthModel
+import com.peteralexbizjak.models.database.AllDatabaseItemsModel
 import com.peteralexbizjak.models.query.IDQueryModel
 import com.peteralexbizjak.services.MongoService
+import com.peteralexbizjak.utils.helpers.concatenate
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -14,6 +16,32 @@ import models.database.NoteModel
 import models.database.UserModel
 
 fun Route.database(mongoService: MongoService) {
+    route("all") {
+        get("per_user") {
+            val queryParameters = call.request.queryParameters
+            val queryParameterToken = queryParameters["token"] ?: ""
+            if (queryParameterToken.isNotBlank()) {
+                val dbOperationResult = concatenate<AllDatabaseItemsModel>(
+                        mongoService
+                                .fetchAllLogins(queryParameterToken)
+                                .map { AllDatabaseItemsModel(it.modelType(), it.id, it.loginName, it.username) },
+                        mongoService
+                                .fetchAllNotes(queryParameterToken)
+                                .map { AllDatabaseItemsModel(it.modelType(), it.id, "Secure note", "${it.noteContents.substring(0..25)}...") }
+                )
+                call.respond(HttpStatusCode.OK, dbOperationResult)
+            } else {
+                call.respond(
+                        HttpStatusCode.BadRequest,
+                        ErrorAuthModel(
+                                400,
+                                "400: Bad Request",
+                                "Your request does not contain necessary parameter 'token'"
+                        )
+                )
+            }
+        }
+    }
     route("login") {
         post("create") {
             val request = call.receive<LoginModel>()
@@ -30,12 +58,12 @@ fun Route.database(mongoService: MongoService) {
                 call.respond(HttpStatusCode.OK, dbOperationResult)
             } else {
                 call.respond(
-                    HttpStatusCode.BadRequest,
-                    ErrorAuthModel(
-                        400,
-                        "400: Bad Request",
-                        "Your request does not contain necessary parameters 'id' and 'token'"
-                    )
+                        HttpStatusCode.BadRequest,
+                        ErrorAuthModel(
+                                400,
+                                "400: Bad Request",
+                                "Your request does not contain necessary parameters 'id' and 'token'"
+                        )
                 )
             }
         }
@@ -48,12 +76,12 @@ fun Route.database(mongoService: MongoService) {
                 call.respond(HttpStatusCode.OK, dbOperationResult)
             } else {
                 call.respond(
-                    HttpStatusCode.BadRequest,
-                    ErrorAuthModel(
-                        400,
-                        "400: Bad Request",
-                        "Your request does not contain necessary parameter 'token'"
-                    )
+                        HttpStatusCode.BadRequest,
+                        ErrorAuthModel(
+                                400,
+                                "400: Bad Request",
+                                "Your request does not contain necessary parameter 'token'"
+                        )
                 )
             }
         }
@@ -87,12 +115,12 @@ fun Route.database(mongoService: MongoService) {
                 call.respond(HttpStatusCode.OK, dbOperationResult)
             } else {
                 call.respond(
-                    HttpStatusCode.BadRequest,
-                    ErrorAuthModel(
-                        400,
-                        "400: Bad Request",
-                        "Your request does not contain necessary parameters 'id' and 'token'"
-                    )
+                        HttpStatusCode.BadRequest,
+                        ErrorAuthModel(
+                                400,
+                                "400: Bad Request",
+                                "Your request does not contain necessary parameters 'id' and 'token'"
+                        )
                 )
             }
         }
@@ -105,12 +133,12 @@ fun Route.database(mongoService: MongoService) {
                 call.respond(HttpStatusCode.OK, dbOperationResult)
             } else {
                 call.respond(
-                    HttpStatusCode.BadRequest,
-                    ErrorAuthModel(
-                        400,
-                        "400: Bad Request",
-                        "Your request does not contain necessary parameter 'token'"
-                    )
+                        HttpStatusCode.BadRequest,
+                        ErrorAuthModel(
+                                400,
+                                "400: Bad Request",
+                                "Your request does not contain necessary parameter 'token'"
+                        )
                 )
             }
         }
@@ -143,12 +171,12 @@ fun Route.database(mongoService: MongoService) {
                 call.respond(HttpStatusCode.OK, dbOperationResult)
             } else {
                 call.respond(
-                    HttpStatusCode.BadRequest,
-                    ErrorAuthModel(
-                        400,
-                        "400: Bad Request",
-                        "Your request does not contain necessary parameters 'id' and 'token'"
-                    )
+                        HttpStatusCode.BadRequest,
+                        ErrorAuthModel(
+                                400,
+                                "400: Bad Request",
+                                "Your request does not contain necessary parameters 'id' and 'token'"
+                        )
                 )
             }
         }
@@ -162,12 +190,12 @@ fun Route.database(mongoService: MongoService) {
                 call.respond(HttpStatusCode.OK, dbOperationResult)
             } else {
                 call.respond(
-                    HttpStatusCode.BadRequest,
-                    ErrorAuthModel(
-                        400,
-                        "400: Bad Request",
-                        "Your request does not contain necessary parameters 'id' and 'token'"
-                    )
+                        HttpStatusCode.BadRequest,
+                        ErrorAuthModel(
+                                400,
+                                "400: Bad Request",
+                                "Your request does not contain necessary parameters 'id' and 'token'"
+                        )
                 )
             }
         }
@@ -191,8 +219,8 @@ private suspend fun dbResultCallRespond(call: ApplicationCall, wasSuccessful: Bo
         call.respond(HttpStatusCode.OK, mapOf("code" to 200, "status" to "Database operation was successful"))
     } else {
         call.respond(
-            HttpStatusCode.InternalServerError,
-            ErrorAuthModel(500, "500: Internal Server Error", "Unable to perform the database operation")
+                HttpStatusCode.InternalServerError,
+                ErrorAuthModel(500, "500: Internal Server Error", "Unable to perform the database operation")
         )
     }
 }
