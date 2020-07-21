@@ -21,14 +21,13 @@ fun Route.database(mongoService: MongoService) {
             val queryParameters = call.request.queryParameters
             val queryParameterToken = queryParameters["token"] ?: ""
             if (queryParameterToken.isNotBlank()) {
-                val dbOperationResult = concatenate<AllDatabaseItemsModel>(
-                        mongoService
-                                .fetchAllLogins(queryParameterToken)
-                                .map { AllDatabaseItemsModel(it.modelType(), it.id, it.loginName, it.username) },
-                        mongoService
-                                .fetchAllNotes(queryParameterToken)
-                                .map { AllDatabaseItemsModel(it.modelType(), it.id, "Secure note", "${it.noteContents.substring(0..25)}...") }
-                )
+                val logins = mongoService
+                        .fetchAllLogins(queryParameterToken)
+                        .map { AllDatabaseItemsModel(it.modelType(), it.id, it.loginName, it.username) }
+                val notes = mongoService
+                        .fetchAllNotes(queryParameterToken)
+                        .map { AllDatabaseItemsModel(it.modelType(), it.id, "Secure note", "${it.noteContents.substring(0..25)}...") }
+                val dbOperationResult = concatenate(logins, notes)
                 call.respond(HttpStatusCode.OK, dbOperationResult)
             } else {
                 call.respond(
