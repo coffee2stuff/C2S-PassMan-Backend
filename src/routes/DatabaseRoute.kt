@@ -91,7 +91,7 @@ fun Route.database(mongoService: MongoService) {
             dbResultCallRespond(call, dbOperationResult)
         }
 
-        delete("delete") {
+        post("delete") {
             val request = call.receive<IDQueryModel>()
             val dbOperationResult = mongoService.deleteLoginById(request.documentID)
             dbResultCallRespond(call, dbOperationResult)
@@ -148,7 +148,7 @@ fun Route.database(mongoService: MongoService) {
             dbResultCallRespond(call, dbOperationResult)
         }
 
-        delete("delete") {
+        post("delete") {
             val request = call.receive<IDQueryModel>()
             val dbOperationResult = mongoService.deleteNoteById(request.documentID)
             dbResultCallRespond(call, dbOperationResult)
@@ -205,7 +205,7 @@ fun Route.database(mongoService: MongoService) {
             dbResultCallRespond(call, dbOperationResult)
         }
 
-        delete("delete") {
+        post("delete") {
             val request = call.receive<IDQueryModel>()
             val dbOperationResult = mongoService.deleteUserById(request.documentID)
             dbResultCallRespond(call, dbOperationResult)
